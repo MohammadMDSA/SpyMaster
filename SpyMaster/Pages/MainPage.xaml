@@ -10,9 +10,33 @@
     mc:Ignorable="d">
 
 	<Grid Background="{ThemeResource SystemControlAccentAcrylicWindowAccentMediumHighBrush}">
-		<StackPanel Orientation="Vertical">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<StackPanel Grid.Column="0" Orientation="Vertical">
 			<controls:ImageEx IsCacheEnabled="True" Width="100" Height="100" animations:Connected.Key="Logo" CornerRadius="999" Source="/Assets/SpyLogo.png"/>
+		</StackPanel>
 
+
+
+		<StackPanel Grid.Column="3">
+			<TextBlock Text="Followers:"/>
+			<controls:Loading x:Name="FollowersLoading"/>
+			<ListView x:Name="FollowersList" ScrollViewer.IsHorizontalRailEnabled="False" ScrollViewer.VerticalScrollMode="Auto">
+				<ListView.Transitions>
+					<TransitionCollection>
+						<AddDeleteThemeTransition/>
+					</TransitionCollection>
+				</ListView.Transitions>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Path=UserName}"/>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ListView>
 		</StackPanel>
 	</Grid>
 </Page>

@@ -1,4 +1,5 @@
 ﻿using InstaSharper.API;
+using InstaSharper.Classes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,6 +29,19 @@ namespace SpyMaster.Pages
 		public MainPage()
 		{
 			this.InitializeComponent();
+		}
+
+		protected async override void OnNavigatedTo(NavigationEventArgs e)
+		{
+			FollowersLoading.IsLoading = true;
+
+			var res = await InstaApi.GetUserFollowersAsync("the_samimd", PaginationParameters.MaxPagesToLoad(1));
+
+			FollowersList.ItemsSource = res.Value;
+
+			FollowersLoading.IsLoading = false;
+
+			Console.Write("he");
 		}
 	}
 }
