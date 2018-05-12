@@ -32,7 +32,7 @@
 			</StackPanel.ChildrenTransitions>
 			<controls:ImageEx IsCacheEnabled="True" Source="/Assets/SpyLogo.png" animations:Connected.Key="Logo" HorizontalAlignment="Center" Margin="0,50,0,0" VerticalAlignment="Center" CornerRadius="999" Stretch="UniformToFill" Height="250" Width="250"/>
 			<TextBox x:Name="UsernameBox" Header="Username:"/>
-			<TextBox x:Name="PasswordBox" Header="Password:"/>
+			<PasswordBox x:Name="PasswordBox" Header="Password:"/>
 			<Button x:Name="LoginBtn" HorizontalAlignment="Center" Content="Login" Click="LoginBtn_Click"/>
 		</StackPanel>
 	</Grid>
