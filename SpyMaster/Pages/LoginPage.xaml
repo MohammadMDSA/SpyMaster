@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
 	xmlns:animations="using:Microsoft.Toolkit.Uwp.UI.Animations"
+	xmlns:media="using:Microsoft.Toolkit.Uwp.UI.Media"
     mc:Ignorable="d">
 
 	<Page.Resources>
@@ -30,10 +31,20 @@
 					<EntranceThemeTransition FromHorizontalOffset="200"/>
 				</TransitionCollection>
 			</StackPanel.ChildrenTransitions>
-			<controls:ImageEx IsCacheEnabled="True" Source="/Assets/SpyLogo.png" animations:Connected.Key="Logo" HorizontalAlignment="Center" Margin="0,50,0,0" VerticalAlignment="Center" CornerRadius="999" Stretch="UniformToFill" Height="250" Width="250"/>
+			<controls:ImageEx x:Name="Logo" IsCacheEnabled="True" Source="/Assets/SpyLogo.png" animations:Connected.Key="Logo" HorizontalAlignment="Center" Margin="0,50,0,0" VerticalAlignment="Center" CornerRadius="999" Stretch="None"/>
 			<TextBox x:Name="UsernameBox" Header="Username:"/>
 			<PasswordBox x:Name="PasswordBox" Header="Password:"/>
-			<Button x:Name="LoginBtn" HorizontalAlignment="Center" Content="Login" Click="LoginBtn_Click"/>
+			<Button x:Name="LoginBtn" HorizontalAlignment="Center" Click="LoginBtn_Click">
+				<Grid>
+					<TextBlock Padding="0">Login</TextBlock>
+					<controls:Loading x:Name="LoadingControl" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+						<controls:Loading.Background>
+							<media:BackdropBlurBrush Amount="1"/>
+						</controls:Loading.Background>
+						<ProgressRing IsActive="True"/>
+					</controls:Loading>
+				</Grid>
+			</Button>
 		</StackPanel>
 	</Grid>
 </Page>

@@ -33,6 +33,9 @@ namespace SpyMaster.Pages
 
 		private async void LoginBtn_Click(object sender, RoutedEventArgs e)
 		{
+			LoadingControl.IsLoading = true;
+			LoginBtn.IsEnabled = false;
+
 			try
 			{
 				Console.WriteLine("Starting demo of InstaSharper project");
@@ -87,6 +90,8 @@ namespace SpyMaster.Pages
 					{
 						Console.WriteLine($"Unable to login: {logInResult.Info.Message}");
 						//return false;
+						LoginBtn.IsEnabled = true;
+						LoadingControl.IsLoading = false;
 						return;
 					}
 
@@ -109,8 +114,11 @@ namespace SpyMaster.Pages
 				//	// perform that if user needs to logged out
 				//	// var logoutResult = Task.Run(() => _instaApi.LogoutAsync()).GetAwaiter().GetResult();
 				//	// if (logoutResult.Succeeded) Console.WriteLine("Logout succeed");
+				LoginBtn.IsEnabled = true;
+				LoadingControl.IsLoading = false;
 			}
 			//return false;
+
 		}
 	}
 }
