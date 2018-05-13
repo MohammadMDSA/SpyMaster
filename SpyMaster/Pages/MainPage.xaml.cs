@@ -1,10 +1,12 @@
 ﻿using InstaSharper.API;
 using InstaSharper.Classes;
+using InstaSharper.Classes.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -25,30 +27,35 @@ namespace SpyMaster.Pages
 	public sealed partial class MainPage : Page
 	{
 		public static IInstaApi InstaApi { get; set; }
-		public static UserSessionData SelfUser { get; set; }
+		public static string SelfUsername { get; set; }
 
 		public MainPage()
 		{
 			this.InitializeComponent();
 		}
 
-		protected override void OnNavigatedTo(NavigationEventArgs e)
+		protected async override void OnNavigatedTo(NavigationEventArgs e)
 		{
 
-			LoadFollowers();
-			
+			SelfUsername = (string)Windows.Storage.ApplicationData.Current.LocalSettings.Values["LastUsername"];
+
+			await LoadPropic();
+
+			await LoadFollowers();
+
 		}
 
-		private async void LoadFollowers()
+		private async Task LoadFollowers()
 		{
-			var res = await InstaApi.GetUserFollowersAsync(SelfUser.UserName, PaginationParameters.MaxPagesToLoad(1));
+			var res = await InstaApi.GetUserFollowersAsync(SelfUsername, PaginationParameters.MaxPagesToLoad(1));
 
 			FollowersList.ItemsSource = res.Value;
 		}
 
-		private async void LoadPropic()
+		private async Task LoadPropic()
 		{
-			var res = await InstaApi.GetUserAsync()
+			var rres = await InstaApi.GetUserAsync(SelfUsername);
+			Propic.Source = rres.Value.ProfilePicture;
 		}
 	}
 }
