@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Storage;
+using System.Threading.Tasks;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -35,56 +36,7 @@ namespace SpyMaster.Pages
 			this.InitializeComponent();
 			AppStorage = ApplicationData.Current.LocalFolder;
 		}
-
-		protected async override void OnNavigatedTo(NavigationEventArgs e)
-		{
-
-
-			
-
-			Console.WriteLine("Starting demo of InstaSharper project");
-			// create user session data and provide login details
-			var userSession = new UserSessionData
-			{
-				UserName = "The_Samimd",
-				//UserName = UsernameBox.Text,
-				Password = "The2nd"
-				//Password = PasswordBox.Password
-			};
-
-			var delay = TimeSpan.FromSeconds(2);
-			// create new InstaApi instance using Builder
-			MainPage.InstaApi = InstaApiBuilder.CreateBuilder()
-				.SetUser(userSession)
-				.UseLogger(new DebugLogger(LogLevel.Exceptions)) // use logger for requests and debug messages
-				.SetRequestDelay(delay)
-				.Build();
-
-			try
-			{
-				var stateFile = AppStorage.TryGetItemAsync(STATE_FILE);
-				if (stateFile != null)
-				{
-					Console.WriteLine("Loading state from file");
-					//using (var fs = File.OpenRead(stateFile))
-					using (var fs = await AppStorage.OpenStreamForReadAsync(STATE_FILE))
-					{
-						MainPage.InstaApi.LoadStateDataFromStream(fs);
-					}
-				}
-			}
-			catch (Exception eev)
-			{
-				Console.WriteLine(eev);
-			}
-
-
-			if (MainPage.InstaApi.IsUserAuthenticated)
-			{
-				(Window.Current.Content as Frame).Navigate(typeof(MainPage));
-			}
-		}
-
+		
 		private async void LoginBtn_Click(object sender, RoutedEventArgs e)
 		{
 			LoadingControl.IsLoading = true;
@@ -140,7 +92,7 @@ namespace SpyMaster.Pages
 						state.CopyTo(fileStream);
 					}
 
-					(Window.Current.Content as Frame).Navigate(typeof(MainPage));
+					App.MainFrame.Navigate(typeof(MainPage));
 				}
 			}
 			catch (Exception ex)
@@ -156,6 +108,52 @@ namespace SpyMaster.Pages
 				LoadingControl.IsLoading = false;
 			}
 			//return false;
+
+		}
+
+		private async void Page_Loaded(object sender, RoutedEventArgs e)
+		{
+			Console.WriteLine("Starting demo of InstaSharper project");
+			// create user session data and provide login details
+			var userSession = new UserSessionData
+			{
+				UserName = "The_Samimd",
+				//UserName = UsernameBox.Text,
+				Password = "The2nd"
+				//Password = PasswordBox.Password
+			};
+
+			var delay = TimeSpan.FromSeconds(2);
+			// create new InstaApi instance using Builder
+			MainPage.InstaApi = InstaApiBuilder.CreateBuilder()
+				.SetUser(userSession)
+				.UseLogger(new DebugLogger(LogLevel.Exceptions)) // use logger for requests and debug messages
+				.SetRequestDelay(delay)
+				.Build();
+
+			try
+			{
+				var stateFile = AppStorage.TryGetItemAsync(STATE_FILE);
+				if (stateFile != null)
+				{
+					Console.WriteLine("Loading state from file");
+					//using (var fs = File.OpenRead(stateFile))
+					using (var fs = await AppStorage.OpenStreamForReadAsync(STATE_FILE))
+					{
+						MainPage.InstaApi.LoadStateDataFromStream(fs);
+					}
+				}
+			}
+			catch (Exception eev)
+			{
+				Console.WriteLine(eev);
+			}
+
+
+			if (MainPage.InstaApi.IsUserAuthenticated)
+			{
+				App.MainFrame.Navigate(typeof(MainPage));
+			}
 
 		}
 	}
