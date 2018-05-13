@@ -69,13 +69,19 @@ namespace SpyMaster.Pages
 					//delay.Disable();
 					var logInResult = await MainPage.InstaApi.LoginAsync();
 					//delay.Enable();
-					if (!logInResult.Succeeded)
+
+					if (logInResult.Info.ResponseType == ResponseType.UnExpectedResponse)
+					{
+						var twoFactorRes = await MainPage.InstaApi.GetTwoFactorInfoAsync();
+						if(twoFactorRes.Succeeded);
+					}
+					else if (!logInResult.Succeeded)
 					{
 						Console.WriteLine($"Unable to login: {logInResult.Info.Message}");
 						LoginBtn.IsEnabled = true;
 						LoadingControl.IsLoading = false;
 						return;
-					}
+					} 
 
 					AppSettings.Values["LastUsername"] = UsernameBox.Text.ToLower();
 					AppSettings.Values["LastPassword"] = PasswordBox.Password;
