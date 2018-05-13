@@ -19,9 +19,9 @@ namespace SpyMaster.Controls
 {
 	public sealed partial class UserBanner : UserControl
 	{
-		public string Username { get; set; }
-		public string Fullname { get; set; }
-		public string PicSource { get; set; }
+		public string Username { get => UsernameLabel.Text; set => UsernameLabel.Text = value; }
+		public string FullName { get => FullNameLabel.Text; set => FullNameLabel.Text = value; }
+		public object PicSource { get => Pic.Source; set => Pic.Source = value; }
 
 		public UserBanner()
 		{

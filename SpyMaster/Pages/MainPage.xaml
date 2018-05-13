@@ -7,7 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
 	xmlns:animations="using:Microsoft.Toolkit.Uwp.UI.Animations"
-    mc:Ignorable="d">
+	xmlns:controls1="using:SpyMaster.Controls"
+	mc:Ignorable="d">
 
 	<Grid Background="{ThemeResource SystemControlAccentAcrylicWindowAccentMediumHighBrush}">
 		<Grid.RowDefinitions>
@@ -43,7 +44,7 @@
 					</ListView.Transitions>
 					<ListView.ItemTemplate>
 						<DataTemplate>
-							
+							<controls1:UserBanner PicSource="{Binding Path=ProfilePicture}" Username="Hey" FullName="Hoy"/>
 						</DataTemplate>
 					</ListView.ItemTemplate>
 				</ListView>
