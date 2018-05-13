@@ -49,16 +49,16 @@ namespace SpyMaster.Pages
 
 				Console.WriteLine("Starting demo of InstaSharper project");
 				// create user session data and provide login details
-				MainPage.SelfUser = new UserSessionData
+				var user = new UserSessionData
 				{
 					UserName = UsernameBox.Text,
 					Password = PasswordBox.Password
 				};
-
+				
 				var delay = TimeSpan.FromSeconds(2);
 				// create new InstaApi instance using Builder
 				MainPage.InstaApi = InstaApiBuilder.CreateBuilder()
-					.SetUser(MainPage.SelfUser)
+					.SetUser(user)
 					.UseLogger(new DebugLogger(LogLevel.Exceptions)) // use logger for requests and debug messages
 					.SetRequestDelay(delay)
 					.Build();
@@ -72,13 +72,13 @@ namespace SpyMaster.Pages
 					if (!logInResult.Succeeded)
 					{
 						Console.WriteLine($"Unable to login: {logInResult.Info.Message}");
-						//return false;
-						AppSettings.Values["LastUsername"] = UsernameBox.Text;
-						AppSettings.Values["LastPassword"] = PasswordBox.Password;
 						LoginBtn.IsEnabled = true;
 						LoadingControl.IsLoading = false;
 						return;
 					}
+
+					AppSettings.Values["LastUsername"] = UsernameBox.Text.ToLower();
+					AppSettings.Values["LastPassword"] = PasswordBox.Password;
 
 					var stateFile = await AppStorage.CreateFileAsync(STATE_FILE);
 
@@ -113,7 +113,7 @@ namespace SpyMaster.Pages
 		{
 			Console.WriteLine("Starting demo of InstaSharper project");
 			// create user session data and provide login details
-			MainPage.SelfUser = new UserSessionData
+			var user = new UserSessionData
 			{
 				UserName = (string)AppSettings.Values["LastUsername"],
 				Password = (string)AppSettings.Values["LastPassword"]
@@ -122,7 +122,7 @@ namespace SpyMaster.Pages
 			var delay = TimeSpan.FromSeconds(2);
 			// create new InstaApi instance using Builder
 			MainPage.InstaApi = InstaApiBuilder.CreateBuilder()
-				.SetUser(MainPage.SelfUser)
+				.SetUser(user)
 				.UseLogger(new DebugLogger(LogLevel.Exceptions)) // use logger for requests and debug messages
 				.SetRequestDelay(delay)
 				.Build();
