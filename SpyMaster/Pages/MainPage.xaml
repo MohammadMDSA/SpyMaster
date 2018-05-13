@@ -10,33 +10,44 @@
     mc:Ignorable="d">
 
 	<Grid Background="{ThemeResource SystemControlAccentAcrylicWindowAccentMediumHighBrush}">
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition/>
-			<ColumnDefinition/>
-			<ColumnDefinition/>
-			<ColumnDefinition/>
-		</Grid.ColumnDefinitions>
-		<StackPanel Grid.Column="0" Orientation="Vertical">
-			<controls:ImageEx IsCacheEnabled="True" Width="100" Height="100" animations:Connected.Key="Logo" CornerRadius="999" Source="/Assets/SpyLogo.png"/>
-		</StackPanel>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="15*"/>
+		</Grid.RowDefinitions>
+		<Grid Grid.Column="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="2*"/>
+				<ColumnDefinition Width="2*"/>
+				<ColumnDefinition Width="2*"/>
+			</Grid.ColumnDefinitions>
+		<controls:ImageEx x:Name="Propic" Grid.Row="0" IsCacheEnabled="True" VerticalAlignment="Stretch" HorizontalAlignment="Center" animations:Connected.Key="Logo" Stretch="Uniform" CornerRadius="999" Source="/Assets/SpyLogo.png"/>
+		</Grid>
 
 
-
-		<StackPanel Grid.Column="3">
-			<TextBlock Text="Followers:"/>
-			<controls:Loading x:Name="FollowersLoading"/>
-			<ListView x:Name="FollowersList" ScrollViewer.IsHorizontalRailEnabled="False" ScrollViewer.VerticalScrollMode="Auto">
-				<ListView.Transitions>
-					<TransitionCollection>
-						<AddDeleteThemeTransition/>
-					</TransitionCollection>
-				</ListView.Transitions>
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<TextBlock Text="{Binding Path=UserName}"/>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ListView>
-		</StackPanel>
+		<Grid Grid.Row="1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+			</Grid.ColumnDefinitions>
+			
+			<StackPanel Grid.Column="3">
+				<TextBlock Text="Followers:"/>
+				<ListView x:Name="FollowersList" ScrollViewer.IsHorizontalRailEnabled="False" ScrollViewer.VerticalScrollMode="Auto">
+					<ListView.Transitions>
+						<TransitionCollection>
+							<AddDeleteThemeTransition/>
+						</TransitionCollection>
+					</ListView.Transitions>
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding Path=UserName}"/>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
+			</StackPanel>
+		</Grid>
 	</Grid>
 </Page>

@@ -29,12 +29,14 @@ namespace SpyMaster.Pages
 	public sealed partial class LoginPage : Page
 	{
 		private StorageFolder AppStorage;
+		private ApplicationDataContainer AppSettings;
 		private const string STATE_FILE = "state.bin";
 
 		public LoginPage()
 		{
 			this.InitializeComponent();
 			AppStorage = ApplicationData.Current.LocalFolder;
+			AppSettings = ApplicationData.Current.LocalSettings;
 		}
 		
 		private async void LoginBtn_Click(object sender, RoutedEventArgs e)
@@ -44,29 +46,23 @@ namespace SpyMaster.Pages
 
 			try
 			{
-				//// create account
-				//var username = "kajokoleha";
-				//var password = "ramtinjokar";
-				//var email = "ramtinak@live.com";
-				//var firstName = "Ramtin";
-				//var accountCreation = await _instaApi.CreateNewAccount(username, password, email, firstName);
 
+				Console.WriteLine("Starting demo of InstaSharper project");
+				// create user session data and provide login details
+				MainPage.SelfUser = new UserSessionData
+				{
+					UserName = UsernameBox.Text,
+					Password = PasswordBox.Password
+				};
 
-				//try
-				//{
-				//	if (File.Exists(stateFile))
-				//	{
-				//		Console.WriteLine("Loading state from file");
-				//		using (var fs = File.OpenRead(stateFile))
-				//		{
-				//			_instaApi.LoadStateDataFromStream(fs);
-				//		}
-				//	}
-				//}
-				//catch (Exception eev)
-				//{
-				//	Console.WriteLine(eev);
-				//}
+				var delay = TimeSpan.FromSeconds(2);
+				// create new InstaApi instance using Builder
+				MainPage.InstaApi = InstaApiBuilder.CreateBuilder()
+					.SetUser(MainPage.SelfUser)
+					.UseLogger(new DebugLogger(LogLevel.Exceptions)) // use logger for requests and debug messages
+					.SetRequestDelay(delay)
+					.Build();
+
 
 				if (!MainPage.InstaApi.IsUserAuthenticated)
 				{
@@ -77,6 +73,8 @@ namespace SpyMaster.Pages
 					{
 						Console.WriteLine($"Unable to login: {logInResult.Info.Message}");
 						//return false;
+						AppSettings.Values["LastUsername"] = UsernameBox.Text;
+						AppSettings.Values["LastPassword"] = PasswordBox.Password;
 						LoginBtn.IsEnabled = true;
 						LoadingControl.IsLoading = false;
 						return;
@@ -115,18 +113,16 @@ namespace SpyMaster.Pages
 		{
 			Console.WriteLine("Starting demo of InstaSharper project");
 			// create user session data and provide login details
-			var userSession = new UserSessionData
+			MainPage.SelfUser = new UserSessionData
 			{
-				UserName = "The_Samimd",
-				//UserName = UsernameBox.Text,
-				Password = "The2nd"
-				//Password = PasswordBox.Password
+				UserName = (string)AppSettings.Values["LastUsername"],
+				Password = (string)AppSettings.Values["LastPassword"]
 			};
 
 			var delay = TimeSpan.FromSeconds(2);
 			// create new InstaApi instance using Builder
 			MainPage.InstaApi = InstaApiBuilder.CreateBuilder()
-				.SetUser(userSession)
+				.SetUser(MainPage.SelfUser)
 				.UseLogger(new DebugLogger(LogLevel.Exceptions)) // use logger for requests and debug messages
 				.SetRequestDelay(delay)
 				.Build();

@@ -25,23 +25,30 @@ namespace SpyMaster.Pages
 	public sealed partial class MainPage : Page
 	{
 		public static IInstaApi InstaApi { get; set; }
+		public static UserSessionData SelfUser { get; set; }
 
 		public MainPage()
 		{
 			this.InitializeComponent();
 		}
 
-		protected async override void OnNavigatedTo(NavigationEventArgs e)
+		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
-			FollowersLoading.IsLoading = true;
 
-			var res = await InstaApi.GetUserFollowersAsync("the_samimd", PaginationParameters.MaxPagesToLoad(1));
+			LoadFollowers();
+			
+		}
+
+		private async void LoadFollowers()
+		{
+			var res = await InstaApi.GetUserFollowersAsync(SelfUser.UserName, PaginationParameters.MaxPagesToLoad(1));
 
 			FollowersList.ItemsSource = res.Value;
+		}
 
-			FollowersLoading.IsLoading = false;
-
-			Console.Write("he");
+		private async void LoadPropic()
+		{
+			var res = await InstaApi.GetUserAsync()
 		}
 	}
 }
